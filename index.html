@@ -1,0 +1,1360 @@
+<!-- 网页取源工具主HTML文件，包含页面结构和注释 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <!-- 页面字符集和视口设置 -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网页取源工具</title>
+    <!-- 引入MDUI样式 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui@1.0.2/dist/css/mdui.min.css">
+    <style>
+    /* ======================
+   CSS 样式表 - 网页取源工具
+   ====================== */
+
+/* --------------------------
+   CSS 变量定义 (自定义属性)
+   使用CSS变量便于主题颜色的统一管理和修改
+   -------------------------- */
+:root {
+    --primary-color: #2196F3;   /* 主题主色（蓝色），用于主按钮、标题等主要元素 */
+    --accent-color: #00BCD4;    /* 强调色（青色），用于次要高亮元素 */
+    --text-color: #333;         /* 主文本颜色（深灰色），用于大部分文本内容 */
+    --light-text: #757575;      /* 辅助文本颜色（浅灰色），用于次要文本或提示信息 */
+    --border-color: #e0e0e0;    /* 边框颜色（浅灰色），用于各种边框 */
+    --bg-color: #f5f5f5;        /* 背景色（极浅灰色），用于背景区域 */
+}
+
+/* --------------------------
+   全局样式
+   -------------------------- */
+body {
+    background-color: #fafafa;  /* 页面整体背景色（更浅的灰色），提供柔和的视觉效果 */
+    color: var(--text-color);   /* 使用定义的主文本颜色 */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; /* 使用系统默认字体，确保跨平台一致性 */
+}
+
+/* --------------------------
+   主容器样式
+   限制最大宽度，居中显示，添加内边距和阴影，增加圆角以提升视觉效果
+   -------------------------- */
+.container {
+    max-width: 900px;           /* 主容器的最大宽度，确保在大屏上不会过宽 */
+    margin: 0 auto;             /* 水平居中 */
+    padding: 20px;              /* 内边距，增加内容与边框的距离 */
+    background: white;          /* 背景颜色为白色，提供清晰的视觉对比 */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05); /* 添加轻微的阴影，增加层次感 */
+    border-radius: 8px;         /* 圆角边框，提升视觉柔和度 */
+    margin-top: 20px;           /* 上边距，避免与页面顶部过于紧凑 */
+    margin-bottom: 20px;        /* 下边距，避免与页面底部过于紧凑 */
+}
+
+/* --------------------------
+   头部样式
+   居中显示，添加下边距和底部边框，增强标题区域的分隔感
+   -------------------------- */
+.header {
+    text-align: center;         /* 文本居中对齐 */
+    margin-bottom: 24px;        /* 下边距，增加与下方元素的距离 */
+    padding-bottom: 16px;       /* 底部内边距，增加标题与边框的距离 */
+    border-bottom: 1px solid var(--border-color); /* 底部边框，颜色使用定义的边框颜色 */
+}
+
+/* 头部标题样式 */
+.header h1 {
+    font-size: 24px;            /* 字体大小 */
+    font-weight: 500;           /* 字体粗细，中等粗细 */
+    color: var(--primary-color); /* 使用主题主色，增强标题的视觉重要性 */
+    margin: 0;                  /* 移除默认的外边距 */
+}
+
+/* 头部说明文字样式 */
+.header p {
+    color: var(--light-text);   /* 使用辅助文本颜色，降低视觉重要性 */
+    margin-top: 8px;            /* 上边距，增加与标题的距离 */
+    font-size: 14px;            /* 字体大小，较小以区分标题 */
+}
+
+/* --------------------------
+   输入区域样式
+   增加下边距，确保与头部和其他元素有足够的间隔
+   -------------------------- */
+.input-area {
+    margin-bottom: 24px;        /* 下边距，增加与下方元素的间距 */
+}
+
+/* --------------------------
+   按钮组样式
+   使用Flexbox布局，允许按钮在小屏幕上自动换行，增加按钮之间的间隙
+   -------------------------- */
+.button-group {
+    display: flex;              /* 使用Flexbox布局 */
+    flex-wrap: wrap;            /* 允许按钮在空间不足时自动换行 */
+    gap: 12px;                  /* 按钮之间的间隙 */
+    margin-bottom: 24px;        /* 下边距，增加与下方元素的间距 */
+}
+
+/* 按钮组中的按钮样式 */
+.button-group .mdui-btn {
+    flex: 1;                    /* 按钮在容器中均匀分配空间 */
+    min-width: 140px;           /* 按钮的最小宽度，确保按钮不会过窄 */
+    height: 44px;               /* 按钮高度，提供合适的点击区域 */
+    font-size: 15px;            /* 字体大小 */
+    border-radius: 4px;         /* 圆角边框，提升视觉柔和度 */
+    text-transform: none;       /* 不转换文本为大写，保持原样 */
+}
+
+/* --------------------------
+   选项卡容器样式
+   增加上边距，添加圆角和阴影，增强视觉层次感
+   -------------------------- */
+.tab-container {
+    margin-top: 16px;           /* 上边距，增加与上方元素的间距 */
+    border-radius: 8px;         /* 圆角边框 */
+    overflow: hidden;           /* 隐藏溢出内容，确保圆角效果 */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* 添加轻微的阴影，增加层次感 */
+}
+
+/* 选项卡整体样式 */
+.mdui-tab {
+    background-color: white;    /* 背景颜色为白色 */
+    padding: 0 16px;            /* 左右内边距 */
+    font-size: 15px;            /* 字体大小 */
+    font-weight: 500;           /* 字体粗细，中等粗细 */
+}
+
+/* 选项卡链接样式 */
+.mdui-tab a {
+    padding: 16px 20px;         /* 上下和左右内边距 */
+    color: var(--light-text);   /* 使用辅助文本颜色，降低未激活选项卡的视觉重要性 */
+}
+
+/* 激活状态的选项卡链接样式 */
+.mdui-tab a.mdui-tab-active {
+    color: var(--primary-color); /* 使用主题主色，突出显示当前激活的选项卡 */
+}
+
+/* --------------------------
+   结果容器样式
+   设置固定高度，背景颜色，边框和圆角，使用Flexbox布局以分割文件树和代码视图
+   -------------------------- */
+.result-container {
+    height: 550px;              /* 固定高度，确保结果区域的一致性 */
+    background-color: white;    /* 背景颜色为白色 */
+    border: 1px solid var(--border-color); /* 边框颜色使用定义的边框颜色 */
+    border-top: none;           /* 移除上边框，与上方元素无缝连接 */
+    border-radius: 0 0 8px 8px; /* 底部圆角，与上方元素形成视觉衔接 */
+    position: relative;         /* 相对定位，为加载动画等绝对定位元素提供参考 */
+    display: flex;              /* 使用Flexbox布局，将容器分为文件树和代码视图两部分 */
+}
+
+/* --------------------------
+   文件树容器样式
+   固定宽度，添加右边框和内边距，背景颜色稍浅，提供与代码视图的视觉区分
+   -------------------------- */
+.file-tree-container {
+    width: 270px;               /* 固定宽度 */
+    border-right: 1px solid var(--border-color); /* 右侧边框，颜色使用定义的边框颜色 */
+    background: #f8f9fa;        /* 背景颜色稍浅，提供视觉区分 */
+    overflow-y: auto;           /* 允许垂直滚动，确保内容过多时可滚动查看 */
+    padding: 12px 4px 12px 12px; /* 内边距，增加内容与边框的距离 */
+}
+
+/* --------------------------
+   文件树样式
+   移除默认列表样式，设置字体大小
+   -------------------------- */
+.file-tree {
+    list-style: none;           /* 移除默认的列表项目符号 */
+    padding-left: 0;            /* 移除默认的左侧内边距 */
+    margin: 0;                  /* 移除默认的外边距 */
+    font-size: 13px;            /* 字体大小，稍小以区分其他文本 */
+}
+
+/* 文件树中的每个项目样式 */
+.file-tree li {
+    margin-bottom: 7px;         /* 项目之间的下边距，增加间隔 */
+    cursor: pointer;            /* 鼠标指针变为手型，提示可点击 */
+    padding: 2px 7px;           /* 上下和左右内边距，增加点击区域 */
+    border-radius: 4px;         /* 圆角边框，提升视觉柔和度 */
+    transition: background .15s; /* 背景颜色过渡效果，提升交互体验 */
+    word-break: break-all;      /* 允许长单词或URL在任意字符处换行，防止溢出 */
+}
+
+/* 激活状态或鼠标悬停时的文件树项目样式 */
+.file-tree li.active, .file-tree li:hover {
+    background: #e3f2fd;        /* 背景颜色变为主题色的浅色，突出显示当前选中或悬停的项目 */
+}
+
+/* 文件URL样式 */
+.file-url {
+    display: block;             /* 块级元素，占据整行 */
+    font-size: 12px;            /* 字体大小，较小以区分项目名称 */
+    color: #888;                /* 文本颜色，较浅，表示辅助信息 */
+    margin-top: 2px;            /* 上边距，增加与项目名称的距离 */
+    word-break: break-all;      /* 允许长URL在任意字符处换行，防止溢出 */
+}
+
+/* --------------------------
+   代码视图容器样式
+   使用Flexbox占据剩余空间，允许内容溢出时滚动，设置背景颜色
+   -------------------------- */
+.code-view-container {
+    flex: 1;                    /* 使用Flexbox占据剩余空间 */
+    overflow: auto;             /* 允许内容溢出时滚动 */
+    position: relative;         /* 相对定位，为加载动画等绝对定位元素提供参考 */
+    background-color: #f8f9fa;  /* 背景颜色稍浅，提供视觉区分 */
+}
+
+/* 代码预览区域样式 */
+pre {
+    margin: 0;                  /* 移除默认的外边距 */
+    white-space: pre-wrap;      /* 保留空白符，但允许自动换行 */
+    word-wrap: break-word;      /* 允许长单词或URL在任意字符处换行，防止溢出 */
+    font-size: 14px;            /* 字体大小 */
+    font-family: 'Roboto Mono', monospace; /* 使用等宽字体，确保代码对齐 */
+    padding: 16px;              /* 内边距，增加内容与边框的距离 */
+    min-height: 100%;           /* 最小高度，确保代码视图填充容器 */
+    color: #333;                /* 文本颜色，使用主文本颜色 */
+}
+
+/* --------------------------
+   预览框架样式
+   设置宽度与高度为100%，移除边框，背景颜色为白色
+   -------------------------- */
+#preview-frame {
+    width: 100%;                /* 宽度占据父容器的100% */
+    height: 100%;               /* 高度占据父容器的100% */
+    border: none;               /* 移除边框，与容器无缝连接 */
+    background: white;          /* 背景颜色为白色 */
+}
+
+/* --------------------------
+   加载动画样式
+   绝对定位，覆盖整个结果容器，居中显示加载动画和提示信息
+   -------------------------- */
+.loading {
+    position: absolute;         /* 绝对定位，相对于.result-container */
+    top: 0;                     /* 上边缘对齐 */
+    left: 0;                    /* 左边缘对齐 */
+    right: 0;                   /* 右边缘对齐 */
+    bottom: 0;                  /* 下边缘对齐 */
+    display: flex;              /* 使用Flexbox布局，居中子元素 */
+    justify-content: center;    /* 水平居中 */
+    align-items: center;        /* 垂直居中 */
+    background-color: rgba(255,255,255,0.8); /* 半透明白色背景，确保加载动画可见但不完全遮挡内容 */
+    z-index: 100;               /* 高z-index，确保加载动画位于顶层 */
+}
+
+/* --------------------------
+   状态栏样式
+   使用Flexbox布局，左右对齐，设置背景颜色、边框和字体颜色
+   -------------------------- */
+.status-bar {
+    display: flex;              /* 使用Flexbox布局 */
+    justify-content: space-between; /* 左右两端对齐子元素 */
+    align-items: center;        /* 垂直居中子元素 */
+    padding: 8px 16px;          /* 上下和左右内边距 */
+    background-color: var(--bg-color); /* 背景颜色使用定义的背景色 */
+    border-top: 1px solid var(--border-color); /* 上边框，颜色使用定义的边框颜色 */
+    font-size: 13px;            /* 字体大小，较小以区分主要内容 */
+    color: var(--light-text);   /* 文本颜色使用辅助文本颜色，降低视觉重要性 */
+}
+
+/* --------------------------
+   响应式布局（移动端适配）
+   当屏幕宽度小于等于768px时，调整各元素的样式以适应小屏幕
+   -------------------------- */
+@media (max-width: 768px) {
+    .container { 
+        margin: 10px;           /* 减少容器的外边距，适应小屏幕 */
+        padding: 16px;          /* 减少内边距，增加内容区域 */
+    }
+    .button-group .mdui-btn { 
+        flex: 100%;             /* 按钮在小屏幕上占据整行，避免换行导致的布局混乱 */
+    }
+    .result-container { 
+        height: 400px;          /* 减少结果容器的高度，适应小屏幕 */
+    }
+    .mdui-tab a { 
+        padding: 12px 16px;     /* 减少选项卡链接的内边距，适应小屏幕 */
+        font-size: 14px;        /* 减小字体大小，增加空间利用率 */
+    }
+    .file-tree-container { 
+        width: 120px;           /* 减少文件树容器的宽度，适应小屏幕 */
+    }
+}
+
+/* --------------------------
+   头部图片样式
+   设置最大宽度，保持图片比例，添加上边距、圆角和阴影，创建漂浮动画效果
+   -------------------------- */
+.header img {
+    max-width: 100px;           /* 图片最大宽度，防止过大 */
+    height: auto;               /* 高度自动调整，保持图片比例 */
+    margin-top: 15px;           /* 上边距，增加与标题的距离 */
+    border-radius: 4px;         /* 圆角边框，提升视觉柔和度 */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 添加轻微的阴影，增加层次感 */
+    position: relative;         /* 相对定位，为动画提供参考 */
+    animation: float 3s ease-in-out infinite; /* 应用漂浮动画，无限循环 */
+}
+
+/* --------------------------
+   漂浮动画定义
+   使用@keyframes定义一个上下浮动的动画效果，应用于头部图片
+   -------------------------- */
+@keyframes float {
+    0% { transform: translateY(0px); }          /* 动画起始点，无位移 */
+    50% { transform: translateY(-10px); }       /* 动画中间点，向上浮动10px */
+    100% { transform: translateY(0px); }        /* 动画结束点，回到起始位置 */
+}
+
+/* 在小屏幕上调整头部图片的漂浮动画 */
+@media (max-width: 768px) {
+    .header img {
+        max-width: 80px;        /* 减少图片最大宽度，适应小屏幕 */
+        margin-top: 10px;       /* 减少上边距，适应小屏幕 */
+        animation: float 2.5s ease-in-out infinite; /* 调整动画时长，使其更紧凑 */
+    }
+}
+
+/* --------------------------
+   按钮主题色扩展
+   为不同功能的按钮定义特定的背景颜色，便于用户快速识别按钮功能
+   -------------------------- */
+/* 获取源代码按钮 */
+.btn-fetch { 
+    background-color: var(--primary-color) !important;         /* 使用主题主色作为背景色 */
+}
+.btn-fetch:hover { 
+    background-color: #D7FFF1 !important;                      /* 鼠标悬停时背景色变为...，提供视觉反馈 */
+}
+
+/* 复制按钮 */
+.btn-copy { 
+    background-color: #f199bc !important;                      /* 使用粉色作为背景色 */
+}
+.btn-copy:hover { 
+    background-color: #00dffc !important;                      /* 鼠标悬停时背景色变为蓝色，提供视觉反馈 */
+}
+
+/* 清空按钮 */
+.btn-clear { 
+    background-color: #ede574 !important;                      /* 使用黄色背景色 */
+}
+.btn-clear:hover { 
+    background-color: #E71D36 !important;                      /* 鼠标悬停时背景色，提供视觉反馈 */
+}
+
+/* 一键填充http按钮 */
+.btn-httpfill { 
+    background-color: #75D701 !important;                      /* 使用绿色背景色 */
+}
+.btn-httpfill:hover { 
+    background-color: #A593E0 !important;                      /* 鼠标悬停时背景色，提供视觉反馈 */
+}
+
+/* 历史记录按钮样式 */
+.btn-history { 
+    background-color: var(--accent-color) !important;          /* 使用强调色 作为背景色，与主题协调 */
+}
+.btn-history:hover { 
+    background-color: #eb9f9f !important;                      /* 鼠标悬停时背景色，提供视觉反馈 */
+}
+
+    </style>
+</head>
+<body class="mdui-theme-primary-blue mdui-theme-accent-cyan">
+    <!-- 主内容容器 -->
+    <div class="container">
+        <!-- 顶部标题和说明 -->
+        <div class="header">
+            <h1>网页取源工具</h1>
+            <p>获取任意网页的源代码、响应头和元数据</p>
+            <img src="appicon.png">
+        </div>
+        <!-- 输入区域 -->
+        <div class="input-area">
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <i class="mdui-icon material-icons">link</i>
+                <label class="mdui-textfield-label">输入网址</label>
+                <input class="mdui-textfield-input" type="url" id="url" placeholder="输入网址 | https://example.com" required/> <!-- 原本https://example.com与“输入网址”重叠了 直接采取最简单的措施 输入网址 | https://example.com🤓🤓🤓 -->
+                <div class="mdui-textfield-helper">请输入完整的URL地址，包含http://或https://</div>
+            </div>
+        </div>
+        <!-- 按钮组，布局统一 -->
+<div class="button-group">
+    <button class="mdui-btn mdui-btn-raised mdui-ripple btn-fetch" onclick="fetchAllFiles()">
+        <i class="mdui-icon material-icons">code</i> 获取所有文件
+    </button>
+    <button class="mdui-btn mdui-btn-raised mdui-ripple btn-copy" onclick="copyToClipboard()">
+        <i class="mdui-icon material-icons">content_copy</i> 复制代码
+    </button>
+    <button class="mdui-btn mdui-btn-raised mdui-ripple btn-httpfill" onclick="fillHttp()">
+        <i class="mdui-icon material-icons">flash_on</i> 一键填充http
+    </button>
+    <button class="mdui-btn mdui-btn-raised mdui-ripple btn-clear" onclick="clearAll()">
+        <i class="mdui-icon material-icons">clear</i> 清空
+    </button>
+    <button class="mdui-btn mdui-btn-raised mdui-ripple btn-history" onclick="showHistory()">
+        <i class="mdui-icon material-icons">history</i> 历史记录
+    </button>
+</div>
+
+<!-- 在状态栏下方添加历史记录弹出层 -->
+<div class="mdui-dialog" id="history-dialog">
+    <div class="mdui-dialog-title">浏览历史</div>
+    <div class="mdui-dialog-content">
+        <div id="history-list" class="mdui-list">
+            <!-- 历史记录将在这里动态生成 -->
+            <div class="mdui-list-item mdui-ripple" style="text-align: center; color: #999;">
+                暂无历史记录
+            </div>
+        </div>
+    </div>
+    <div class="mdui-dialog-actions">
+        <button class="mdui-btn mdui-ripple" mdui-dialog-close>关闭</button>
+        <button class="mdui-btn mdui-ripple" onclick="clearHistory()">
+            <i class="mdui-icon material-icons">delete</i> 清空历史
+        </button>
+    </div>
+</div>
+<!-- 代码预览弹窗 双击打开 -->
+<div class="mdui-dialog" id="code-preview-dialog" style="width: 95%; max-width: 1200px; max-height: 85vh;">
+    <div class="mdui-dialog-title">
+        <span id="code-preview-title">源代码预览</span>
+        <button class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-dialog-close" style="float: right;">
+            <i class="mdui-icon material-icons">close</i>
+        </button>
+    </div>
+    <div class="mdui-dialog-content" style="max-height: calc(85vh - 120px); overflow-y: auto; padding: 16px; background-color: #f8f9fa; margin: 0; border-radius: 4px;">
+        <pre id="code-preview-content" style="margin: 0; padding: 0; font-size: 14px; font-family: 'Roboto Mono', monospace; color: #333;"></pre>
+    </div>
+    <div class="mdui-dialog-actions">
+        <button class="mdui-btn mdui-btn-raised mdui-ripple" id="copy-preview-code-btn">
+            <i class="mdui-icon material-icons">content_copy</i> 复制代码
+        </button>
+        <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-dialog-close">
+            关闭
+        </button>
+    </div>
+</div>
+
+        <!-- 选项卡容器 -->
+        <div class="tab-container">
+            <div class="mdui-tab mdui-tab-scrollable" id="tab">
+                <a href="#source-tab" class="mdui-ripple mdui-tab-active">
+                    <i class="mdui-icon material-icons mdui-icon-left">code</i>源代码
+                </a>
+                <a href="#headers-tab" class="mdui-ripple">
+                    <i class="mdui-icon material-icons mdui-icon-left">list</i>响应头
+                </a>
+                <a href="#preview-tab" class="mdui-ripple">
+                    <i class="mdui-icon material-icons mdui-icon-left">visibility</i>预览
+                </a>
+                <a href="#metadata-tab" class="mdui-ripple">
+                    <i class="mdui-icon material-icons mdui-icon-left">info</i>元数据
+                </a>
+            </div>
+            <!-- 源代码结果面板（加入文件树） -->
+            <div id="source-tab" class="result-container">
+                <!-- 文件树 -->
+                <div class="file-tree-container">
+                    <ul class="file-tree" id="file-tree">暂无文件</ul>
+                </div>
+                <!-- 代码预览区 -->
+                <div class="code-view-container">
+                    <pre id="source-result">请输入URL并点击"获取所有文件"按钮<br><br><br><br>双击可预览代码</pre>
+                </div>
+            </div>
+            <!-- 响应头Tab -->
+            <div id="headers-tab" class="result-container" style="display:none">
+                <pre id="headers-result">响应头信息将显示在这里</pre>
+            </div>
+            <!-- 预览Tab -->
+            <div id="preview-tab" class="result-container" style="display:none">
+                <iframe id="preview-frame"></iframe>
+            </div>
+            <!-- 元数据Tab -->
+            <div id="metadata-tab" class="result-container" style="display:none">
+                <pre id="metadata-result">页面元数据将显示在这里</pre>
+            </div>
+            <!-- 状态栏 -->
+            <div class="status-bar">
+                <span id="status-message">就绪</span>
+                <span id="response-time"></span>
+            </div>
+        </div>
+    </div>
+    <!-- 代码高亮 -->
+<link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+    <!-- 引入MDUI JS库 -->
+    <script src="https://cdn.jsdelivr.net/npm/mdui@1.0.2/dist/js/mdui.min.js"></script>
+    <script src="baohu.js"></script>
+    <!-- 主逻辑JS，包含保护名单功能和注释 -->
+    <script>
+// ======================
+// 网页取源工具 - 6.0
+// 2025-8-30
+// ======================
+
+// ==== 保护名单设置，禁止爬取名单内主域名 ====
+const PROTECTED_LIST = [
+    'baidu.com',
+    'qq.com',
+    'example.com',
+    '蔡徐坤.com',
+    // 可继续添加
+];
+
+// ==== 保护名单检测函数 ====
+function isProtected(url) {
+    try {
+        const u = new URL(url);
+        let hostname = u.hostname.toLowerCase();
+        if (hostname.startsWith('www.')) hostname = hostname.slice(4);
+        return PROTECTED_LIST.some(domain => hostname === domain || hostname.endsWith('.' + domain));
+    } catch {
+        return false;
+    }
+}
+
+// ==== 资源类型扩展表 ====
+const EXTENSION_TYPE_MAP = {
+    // 文档
+    'html': 'html', 'htm': 'html', 'xhtml': 'html',
+    // 样式
+    'css': 'css',
+    // 脚本
+    'js': 'js', 'mjs': 'js', 'cjs': 'js',
+    // 图片
+    'png': 'img', 'jpg': 'img', 'jpeg': 'img', 'gif': 'img', 'svg': 'img', 'ico': 'img',
+    'bmp': 'img', 'webp': 'img', 'apng': 'img', 'tiff': 'img', 'jfif': 'img', 'pjpeg': 'img', 'pjp': 'img',
+    // 音频
+    'mp3': 'media', 'wav': 'media', 'ogg': 'media', 'aac': 'media', 'flac': 'media', 'm4a': 'media', 'mp2': 'media', 'opus': 'media',
+    // 视频
+    'mp4': 'media', 'webm': 'media', 'mov': 'media', 'avi': 'media', 'mkv': 'media', 'flv': 'media', '3gp': 'media', 'mpeg': 'media',
+    // 字体
+    'woff': 'font', 'woff2': 'font', 'ttf': 'font', 'otf': 'font', 'eot': 'font',
+    // 其它
+    'json': 'other', 'xml': 'other', 'pdf': 'other', 'zip': 'other', 'rar': 'other', '7z': 'other', 'tar': 'other', 'gz': 'other',
+};
+
+// ==== 状态管理 ====
+const state = {
+    isFetching: false,
+    lastFetchTime: 0,
+    MIN_FETCH_INTERVAL: 3000, // 最小获取间隔时间（毫秒）
+    files: [], // 当前页面的资源文件列表
+    fileContent: {}, // 缓存的文件内容
+    selectedFile: '', // 当前选中的文件
+    baseUrl: '', // 当前页面的基础URL
+    history: [] // 历史记录数组，存储已爬取的URL
+};
+
+// 页面加载完成后初始化
+document.addEventListener('DOMContentLoaded', () => {
+    new mdui.Tab('#tab'); // 初始化MDUI选项卡
+
+    // 监听URL输入框的回车事件，按回车键时触发获取所有文件
+    document.getElementById('url').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') fetchAllFiles();
+    });
+});
+
+// ==== 状态栏信息更新函数 ====
+function updateStatus(message, time = null) {
+    const statusEl = document.getElementById('status-message');
+    const timeEl = document.getElementById('response-time');
+    if (statusEl) statusEl.textContent = message;
+    if (time !== null && timeEl) timeEl.textContent = `响应时间: ${time}ms`;
+}
+
+// ==== 显示加载动画函数 ====
+function showLoading(msg = "正在加载...") {
+    document.getElementById('source-result').innerHTML = `
+        <div class="loading">
+            <div class="mdui-spinner mdui-spinner-colorful"></div>
+            <span>${msg}</span>
+        </div>`;
+}
+
+// ==== MDUI提示条函数 ====
+function showSnackbar(message, type = 'info') {
+    mdui.snackbar({
+        message,
+        position: 'right-bottom',
+        buttonText: '关闭',
+        timeout: 2000,
+        closeOnOutsideClick: true
+    });
+}
+
+// ==== 清空所有输入及结果函数 ====
+function clearAll() {
+    ['url', 'source-result', 'headers-result', 'metadata-result'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = el.textContent = '';
+    });
+    const preview = document.getElementById('preview-frame');
+    if (preview) preview.src = '';
+    document.getElementById('file-tree').innerHTML = '暂无文件';
+    updateStatus('已清空');
+    state.files = [];
+    state.fileContent = {};
+    state.selectedFile = '';
+    state.baseUrl = '';
+}
+
+// ==== 复制代码到剪贴板函数，添加作者信息 ====
+function copyToClipboard() {
+    const sourceResult = document.getElementById('source-result');
+    if (!sourceResult || !isValidContent(sourceResult.textContent)) {
+        return showSnackbar('请先获取源代码', 'warning');
+    }
+    const textarea = document.createElement('textarea');
+    // 在复制的内容前添加作者信息和原始URL
+    textarea.value = ` <!-- \n ========================================\n - 小乌龟🐢网页取源工具\n - 作者:331066\n - 邮箱:li331066@163.com\n - 获取时间: ${new Date().toLocaleString()}\n - 原始URL: ${state.baseUrl || '未知'}\n ========================================\n -->\n\n\n` + sourceResult.textContent;
+    textarea.style.position = 'fixed';
+    document.body.appendChild(textarea);
+    try {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(textarea.value)
+                .then(() => showSnackbar('🟩 复制成功', 'success'))
+                .catch(() => fallbackCopy(textarea));
+        } else {
+            fallbackCopy(textarea);
+        }
+    } catch (error) {
+        showSnackbar('❌ 复制失败', 'error');
+    } finally {
+        document.body.removeChild(textarea);
+    }
+
+    // 判断内容有效
+    function isValidContent(text) {
+        return text && !text.includes('请输入URL') && !text.includes('正在加载');
+    }
+
+    // 兼容性复制方案
+    function fallbackCopy(el) {
+        el.select();
+        el.setSelectionRange(0, 99999);
+        document.execCommand('copy') ?
+            showSnackbar('🟩 已复制', 'success') :
+            showSnackbar('❌ 请手动复制', 'error');
+    }
+}
+
+// ==== 一键填充http或https功能 ====
+function fillHttp() {
+    const urlInput = document.getElementById('url');
+    if (!urlInput) return;
+    let val = urlInput.value.trim();
+    // 如果没有协议，自动选填https，无法判断只填http
+    if (!/^https?:\/\//i.test(val)) {
+        // 判断是否域名/或只填了主机
+        if (/^[\w.-]+\.[a-z]{2,}(\/.*)?$/i.test(val)) {
+            urlInput.value = 'https://' + val;
+        } else if (val) {
+            urlInput.value = 'https://' + val;
+        } else {
+            urlInput.value = 'https://';
+        }
+        showSnackbar('已自动填充 https://', 'success');
+    } else {
+        showSnackbar('已包含协议，无需填充', 'info');
+    }
+    urlInput.focus();
+    urlInput.setSelectionRange(urlInput.value.length, urlInput.value.length);
+}
+
+// ==== 元数据解析函数 ====
+function extractMetadata(html) {
+    try {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const metadata = [];
+        metadata.push(`🔴标题: ${doc.querySelector('title')?.textContent || '无标题'}`);
+        metadata.push(`🟢描述: ${doc.querySelector('meta[name="description"]')?.getAttribute('content') || '无描述'}`);
+        metadata.push(`🔵字符集: ${doc.querySelector('meta[charset]')?.getAttribute('charset') || '未指定'}`);
+        document.getElementById('metadata-result').textContent = metadata.join('\n');
+    } catch (error) {
+        document.getElementById('metadata-result').textContent = `元数据解析失败: ${error.message}`;
+    }
+}
+
+// ==== 选项卡切换函数 ====
+function switchTab(tabId) {
+    ['source-tab', 'headers-tab', 'preview-tab', 'metadata-tab'].forEach(id => {
+        document.getElementById(id).style.display = (id === tabId) ? 'flex' : 'none';
+    });
+    Array.from(document.querySelectorAll('.mdui-tab a')).forEach(a => {
+        if (a.getAttribute('href') === `#${tabId}`) {
+            a.classList.add('mdui-tab-active');
+        } else {
+            a.classList.remove('mdui-tab-active');
+        }
+    });
+}
+
+// ==== 主函数：抓取所有页面资源（保护名单检测） ====
+async function fetchAllFiles() {
+    if (state.isFetching) return showSnackbar('正在获取中...', 'warning');
+    const now = Date.now();
+    if (now - state.lastFetchTime < state.MIN_FETCH_INTERVAL) {
+        const remain = Math.ceil((state.MIN_FETCH_INTERVAL - (now - state.lastFetchTime)) / 1000);
+        return showSnackbar(`请${remain}秒后再试`, 'warning');
+    }
+    const urlInput = document.getElementById('url')?.value.trim();
+    if (!urlInput) return showSnackbar('请输入URL', 'warning');
+    if (!/^https?:\/\//i.test(urlInput)) return showSnackbar('URL格式错误', 'warning');
+    if (isProtected(urlInput)) {
+        showSnackbar('该网址已被保护，无法爬取', 'error');
+        updateStatus('受保护网址，禁止访问');
+        document.getElementById('source-result').textContent = '该网址已被保护，无法获取源代码。';
+        return;
+    }
+    state.isFetching = true;
+    state.lastFetchTime = now;
+    state.baseUrl = urlInput;
+    showLoading('正在分析主页面...');
+    updateStatus('正在请求数据...');
+    try {
+        const startTime = Date.now();
+        // 1. 获取主页面HTML
+        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(urlInput)}`;
+        let response = await fetch(proxyUrl);
+        let data = await response.json();
+        if (!data.contents) throw new Error(data.error || '未知错误');
+        const html = data.contents;
+        extractMetadata(html);
+        // 2. 解析资源链接（支持所有标签及a标签下载资源）
+        const resources = findPageResources(html, urlInput);
+        // 3. 加入主页面html
+        resources.unshift({ name: 'index.html', url: urlInput, type: 'html' });
+        state.files = resources;
+        // 4. 文件树渲染
+        renderFileTree();
+        // 5. 默认显示index.html
+        await showFileContent('index.html', urlInput, 'html');
+        // 6. 获取响应头
+        try {
+            let headResponse = await fetch(urlInput, { method: 'HEAD' });
+            const headers = [];
+            headResponse.headers.forEach((v, k) => headers.push(`${k}: ${v}`));
+            document.getElementById('headers-result').textContent = headers.join('\n');
+        } catch (e) {
+            document.getElementById('headers-result').textContent = `响应头获取失败: ${e.message}`;
+        }
+        switchTab('source-tab');
+        const elapsedTime = Date.now() - startTime;
+        updateStatus('获取成功', elapsedTime);
+        showSnackbar(`获取成功 (${elapsedTime}ms)`, 'success');
+        
+        // ==== 新增代码：将成功获取的URL添加到历史记录 ====
+        // 检查是否已存在该URL
+        if (!state.history.includes(urlInput)) {
+            state.history.unshift(urlInput); // 添加到历史记录的开头
+            // 限制历史记录数量，例如最多保存50条
+            if (state.history.length > 50) {
+                state.history = state.history.slice(0, 50);
+            }
+            saveHistoryToLocalStorage(); // 保存到本地存储
+            updateHistoryList(); // 更新历史记录列表UI
+        }
+    } catch (err) {
+        document.getElementById('source-result').textContent = `获取失败: ${err.message}`;
+        updateStatus('获取失败');
+        showSnackbar(`失败: ${err.message}`, 'error');
+    } finally {
+        state.isFetching = false;
+    }
+}
+
+// ==== 新增函数：从本地存储加载历史记录 ====
+function loadHistoryFromLocalStorage() {
+    const savedHistory = localStorage.getItem('webSourceToolHistory');
+    if (savedHistory) {
+        state.history = JSON.parse(savedHistory);
+        // 如果有历史记录，更新历史列表UI
+        if (state.history.length > 0) {
+            updateHistoryList();
+        }
+    }
+}
+
+// ==== 新增函数：保存历史记录到本地存储 ====
+function saveHistoryToLocalStorage() {
+    localStorage.setItem('webSourceToolHistory', JSON.stringify(state.history));
+}
+
+// ==== 新增函数：更新历史记录列表UI ====
+function updateHistoryList() {
+    const historyListElement = document.getElementById('history-list');
+    if (!historyListElement) return;
+    
+    // 清空当前列表
+    historyListElement.innerHTML = '';
+    
+    // 如果没有历史记录，显示提示信息
+    if (state.history.length === 0) {
+        historyListElement.innerHTML = '<div class="mdui-list-item mdui-ripple" style="text-align: center; color: #999;">暂无历史记录</div>';
+        return;
+    }
+    
+    // 遍历历史记录并创建列表项
+    state.history.forEach((url, index) => {
+        const item = document.createElement('div');
+        item.className = 'mdui-list-item mdui-ripple';
+        item.textContent = url;
+        item.onclick = () => {
+            // 点击历史记录项时，填充URL并获取所有文件
+            document.getElementById('url').value = url;
+            fetchAllFiles();
+            // 关闭对话框
+            const dialog = document.querySelector('#history-dialog');
+            if (dialog) {
+                new mdui.Dialog(dialog).close();
+            }
+        };
+        historyListElement.appendChild(item);
+    });
+}
+
+// ==== 新增函数：显示历史记录对话框 ====
+function showHistory() {
+    const dialog = document.querySelector('#history-dialog');
+    if (dialog) {
+        new mdui.Dialog(dialog).open();
+        // 确保列表是最新的
+        updateHistoryList();
+    }
+}
+
+// ==== 新增函数：清空历史记录 ====
+function clearHistory() {
+    state.history = [];
+    saveHistoryToLocalStorage();
+    updateHistoryList();
+    showSnackbar('历史记录已清空', 'info');
+}
+
+// ==== 资源解析：支持所有主流资源类型 ====
+// 自动查找页面内所有引用（HTML标签/样式/脚本/图片/媒体/字体/下载链接等）
+function findPageResources(html, baseUrl) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const resourceSet = new Set();
+    const resources = [];
+    function absUrl(url) {
+        try {
+            return new URL(url, baseUrl).href;
+        } catch {
+            return url;
+        }
+    }
+    function pushRes(url) {
+        if (!url) return;
+        if (isProtected(url)) return;
+        url = absUrl(url);
+        if (resourceSet.has(url)) return;
+        resourceSet.add(url);
+        const type = getFileType(url);
+        resources.push({ name: getFileName(url), url, type });
+    }
+    // link标签（css、字体、favicon等）
+    doc.querySelectorAll('link').forEach(node => {
+        pushRes(node.getAttribute('href'));
+    });
+    // script标签
+    doc.querySelectorAll('script[src]').forEach(node => {
+        pushRes(node.getAttribute('src'));
+    });
+    // img/image/source/video/audio标签
+    ['img', 'image', 'video', 'audio', 'source', 'embed', 'object'].forEach(tag => {
+        doc.querySelectorAll(tag).forEach(node => {
+            pushRes(node.getAttribute('src'));
+            pushRes(node.getAttribute('data'));
+            pushRes(node.getAttribute('srcset')?.split(' ')[0]);
+        });
+    });
+    // a标签（下载资源：如 a href="file.mp3" download）
+    doc.querySelectorAll('a[download]').forEach(node => {
+        pushRes(node.getAttribute('href'));
+    });
+    // CSS文件里可能还有图片/字体/媒体等（可选：需要进一步爬取CSS内容并分析）
+    // 其它自定义标签可自行扩展
+    return resources;
+}
+
+// ==== 获取文件名 ====
+function getFileName(url) {
+    try {
+        let u = new URL(url);
+        let name = u.pathname.split('/').pop() || u.hostname;
+        if (!name) name = url;
+        return decodeURIComponent(name);
+    } catch {
+        return url;
+    }
+}
+
+// ==== 判断文件类型（根据扩展名） ====
+function getFileType(url) {
+    let ext = '';
+    try {
+        let name = new URL(url).pathname.split('/').pop();
+        if (name && name.includes('.')) ext = name.split('.').pop().toLowerCase();
+    } catch {
+        ext = url.split('.').pop().toLowerCase();
+    }
+    return EXTENSION_TYPE_MAP[ext] || 'other';
+}
+
+// ==== 文件树渲染 ====
+function renderFileTree() {
+    const tree = document.getElementById('file-tree');
+    if (!state.files || state.files.length === 0) {
+        tree.innerHTML = '暂无文件';
+        return;
+    }
+    tree.innerHTML = '';
+    state.files.forEach((file, idx) => {
+        let li = document.createElement('li');
+        li.textContent = file.name;
+        li.title = file.url;
+        li.dataset.idx = idx;
+        if (file.name === state.selectedFile) li.classList.add('active');
+        let urlSpan = document.createElement('span');
+        urlSpan.className = 'file-url';
+        urlSpan.textContent = file.url;
+        li.appendChild(urlSpan);
+        li.onclick = () => {
+            showFileContent(file.name, file.url, file.type);
+        };
+        tree.appendChild(li);
+    });
+}
+
+// ==== 文件内容显示，保护名单禁止访问 ====
+async function showFileContent(name, url, type) {
+    if (isProtected(url)) {
+        document.getElementById('source-result').textContent = '该文件已被保护，无法获取。';
+        return;
+    }
+    state.selectedFile = name;
+    renderFileTree();
+    showLoading(`正在加载: ${name}`);
+    try {
+        let content = state.fileContent[url];
+        // 图片、媒体直接预览
+        if (type === 'img') {
+            document.getElementById('source-result').innerHTML =
+                `<br><a href="${url}" target="_blank">${url}</a>`;
+            switchTab('source-tab');
+            return;
+        }
+        if (type === 'media') {
+            // 音频视频直接预览
+            let ext = url.split('.').pop().toLowerCase();
+            if (['mp3','wav','ogg','aac','flac','m4a','mp2','opus'].includes(ext)) {
+                document.getElementById('source-result').innerHTML =
+                    `<audio controls src="${url}"></audio><br><a href="${url}" target="_blank">${url}</a>`;
+                switchTab('source-tab');
+                return;
+            }
+            if (['mp4','webm','mov','avi','mkv','flv','3gp','mpeg'].includes(ext)) {
+                document.getElementById('source-result').innerHTML =
+                    `<video controls src="${url}" style="max-width:100%;max-height:440px"></video><br><a href="${url}" target="_blank">${url}</a>`;
+                switchTab('source-tab');
+                return;
+            }
+        }
+        // 字体/其它二进制文件直接给下载链接
+        if (type === 'font' || type === 'other') {
+            document.getElementById('source-result').innerHTML =
+                `<a href="${url}" target="_blank" download="${name}">下载文件：${name}</a>`;
+            switchTab('source-tab');
+            return;
+        }
+        // 文本内容
+        if (!content) {
+            let proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+            let response = await fetch(proxyUrl);
+            let data = await response.json();
+            content = data.contents || '';
+            state.fileContent[url] = content;
+        }
+        // 创建pre和code元素
+const pre = document.createElement('pre');
+const code = document.createElement('code');
+code.className = 'language-html'; // 默认使用html高亮
+code.textContent = content;
+pre.appendChild(code);
+document.getElementById('source-result').innerHTML = '';
+document.getElementById('source-result').appendChild(pre);
+
+// 根据文件类型设置不同的高亮语言
+let lang = 'html';
+if (type === 'css') lang = 'css';
+if (type === 'js') lang = 'javascript';
+code.className = `language-${lang}`;
+
+// 手动触发Prism高亮
+if (window.Prism) {
+    Prism.highlightElement(code);
+}
+        switchTab('source-tab');
+    } catch (e) {
+        document.getElementById('source-result').textContent = `获取失败: ${e.message}`;
+    }
+}
+
+// ==== 响应头/预览/元数据tab支持切换 ====
+document.querySelectorAll('.mdui-tab a').forEach(a => {
+    a.addEventListener('click', function(e){
+        e.preventDefault();
+        let id = a.getAttribute('href').replace('#', '');
+        switchTab(id);
+        if (id === 'preview-tab') {
+            document.getElementById('preview-frame').src = state.baseUrl || '';
+        }
+    });
+});
+
+    </script>
+    <script>
+   // ======================
+// 代码预览功能
+// ======================
+
+// 状态变量
+let codePreviewDialog = null;
+let isDialogInitialized = false;
+
+/**
+ * 初始化代码预览弹窗
+ */
+function initCodePreviewDialog() {
+    if (isDialogInitialized) return;
+    
+    // 创建弹窗实例
+    codePreviewDialog = new mdui.Dialog('#code-preview-dialog', {
+        history: false,
+        modal: true,
+        closeOnEsc: true,
+        destroyOnClose: false
+    });
+    
+    // 绑定复制按钮事件（使用事件委托确保始终有效）
+    document.addEventListener('click', function(e) {
+        if (e.target && (e.target.id === 'copy-preview-code-btn' || 
+                         e.target.closest('#copy-preview-code-btn'))) {
+            copyCodePreview();
+        }
+    });
+    
+    isDialogInitialized = true;
+    console.log("代码预览弹窗初始化完成");
+}
+
+/**
+ * 显示代码预览弹窗
+ */
+function showCodePreviewDialog(event) {
+    // 阻止事件冒泡和默认行为
+    if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+    }
+    
+    // 确保弹窗已初始化
+    if (!isDialogInitialized) {
+        initCodePreviewDialog();
+    }
+    
+    const codePreviewTitle = document.getElementById('code-preview-title');
+    const codePreviewContent = document.getElementById('code-preview-content');
+    
+    // 获取当前选中的文件信息
+    const currentFile = state.files.find(f => f.name === state.selectedFile);
+    if (!currentFile) {
+        showSnackbar('没有选中文件', 'warning');
+        return;
+    }
+    
+    try {
+        // 设置预览标题
+        codePreviewTitle.textContent = `${currentFile.name} 预览`;
+        
+        // 清空预览内容
+        codePreviewContent.innerHTML = '';
+        
+        // 根据文件类型显示不同内容
+        switch(currentFile.type) {
+            case 'img':
+                // 图片预览
+                const img = document.createElement('img');
+                img.src = currentFile.url;
+                img.style.maxWidth = '100%';
+                img.style.maxHeight = '70vh';
+                img.style.display = 'block';
+                img.style.margin = '0 auto';
+                codePreviewContent.appendChild(img);
+                break;
+                
+            case 'media':
+                // 媒体文件预览
+                const ext = currentFile.name.split('.').pop().toLowerCase();
+                if (['mp3','wav','ogg','aac','flac','m4a','mp2','opus'].includes(ext)) {
+                    // 音频文件
+                    const audio = document.createElement('audio');
+                    audio.controls = true;
+                    audio.src = currentFile.url;
+                    audio.style.width = '100%';
+                    codePreviewContent.appendChild(audio);
+                } else if (['mp4','webm','mov','avi','mkv','flv','3gp','mpeg'].includes(ext)) {
+                    // 视频文件
+                    const video = document.createElement('video');
+                    video.controls = true;
+                    video.src = currentFile.url;
+                    video.style.maxWidth = '100%';
+                    video.style.maxHeight = '70vh';
+                    video.style.display = 'block';
+                    video.style.margin = '0 auto';
+                    codePreviewContent.appendChild(video);
+                } else {
+                    // 其他媒体文件显示下载链接
+                    const link = document.createElement('a');
+                    link.href = currentFile.url;
+                    link.textContent = '下载媒体文件: ' + currentFile.name;
+                    link.target = '_blank';
+                    codePreviewContent.appendChild(link);
+                }
+                break;
+                
+            case 'font':
+            case 'other':
+                // 字体或其他文件显示下载链接
+                const link = document.createElement('a');
+                link.href = currentFile.url;
+                link.textContent = '下载文件: ' + currentFile.name;
+                link.target = '_blank';
+                codePreviewContent.appendChild(link);
+                break;
+                
+            default:
+                // 文本文件显示代码
+                const sourceResult = document.getElementById('source-result');
+                if (!sourceResult || !sourceResult.textContent || 
+                    sourceResult.textContent.includes('请输入URL') || 
+                    sourceResult.textContent.includes('正在加载') ||
+                    sourceResult.textContent.includes('获取失败') ||
+                    sourceResult.textContent.includes('暂无文件') ||
+                    sourceResult.textContent.trim() === '') {
+                    showSnackbar('暂无可用源代码预览', 'warning');
+                    return;
+                }
+                
+                // 保留代码高亮格式
+                if (sourceResult.querySelector('pre code')) {
+                    // 克隆节点以避免原始内容被影响
+                    const clonedContent = sourceResult.querySelector('pre').cloneNode(true);
+                    codePreviewContent.appendChild(clonedContent);
+                    
+                    // 重新触发代码高亮
+                    if (window.Prism) {
+                        Prism.highlightAllUnder(codePreviewContent);
+                    }
+                } else {
+                    codePreviewContent.textContent = sourceResult.textContent;
+                }
+        }
+        
+        // 调整弹窗大小和样式
+        const dialog = document.getElementById('code-preview-dialog');
+        if (currentFile.type === 'img' || currentFile.type === 'media') {
+            dialog.style.maxWidth = '90%';
+            dialog.style.maxHeight = '90vh';
+        } else {
+            dialog.style.width = '95%';
+            dialog.style.maxWidth = '1200px';
+            dialog.style.maxHeight = '85vh';
+        }
+        
+        // 打开弹窗
+        codePreviewDialog.open();
+    } catch (error) {
+        console.error("显示预览时出错:", error);
+        showSnackbar('打开预览失败: ' + error.message, 'error');
+    }
+}
+
+/**
+ * 复制预览代码到剪贴板
+ */
+function copyCodePreview() {
+    try {
+        const codePreviewContent = document.getElementById('code-preview-content');
+        if (!codePreviewContent) {
+            showSnackbar('复制失败: 找不到内容', 'error');
+            return;
+        }
+        
+        // 获取当前选中的文件信息
+        const currentFile = state.files.find(f => f.name === state.selectedFile);
+        if (!currentFile) {
+            showSnackbar('没有选中文件', 'warning');
+            return;
+        }
+        
+        // 获取当前时间
+        const now = new Date();
+        const formattedTime = now.toLocaleString('zh-CN', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        }).replace(/\//g, '-');
+        
+        // 构建作者信息头部
+        const authorInfo = [
+            ' <!-- ',
+            ' ========================================',
+            ` - 小乌龟🐢网页取源工具`,
+            ` - 作者: ${state.author || '331066'}`,
+            ` - 邮箱: li331066@163.com`,
+            ` - 获取时间: ${formattedTime}`,
+            ` - 原始URL: ${currentFile.url}`,
+            ' ========================================',
+            ' -->',
+            '  ',
+            '  ',
+            '  ',
+            ''
+        ].join('\n');
+        
+        // 对于非文本文件，复制URL和作者信息
+        if (currentFile.type !== 'html' && currentFile.type !== 'css' && currentFile.type !== 'js') {
+            const textToCopy = `${authorInfo}文件URL: ${currentFile.url}`;
+            
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    showSnackbar('文件信息已复制到剪贴板', 'success');
+                }).catch(err => {
+                    fallbackCopyText(textToCopy);
+                });
+            } else {
+                fallbackCopyText(textToCopy);
+            }
+            return;
+        }
+        
+        // 对于文本文件，复制代码内容和作者信息
+        let codeText = '';
+        if (codePreviewContent.querySelector('code')) {
+            codeText = codePreviewContent.querySelector('code').textContent;
+        } else {
+            codeText = codePreviewContent.textContent;
+        }
+        
+        if (!codeText || codeText.trim() === '') {
+            showSnackbar('没有内容可复制', 'warning');
+            return;
+        }
+        
+        // 组合作者信息和代码内容
+        const fullTextToCopy = `${authorInfo}${codeText}`;
+        
+        // 使用现代API尝试复制
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(fullTextToCopy).then(() => {
+                showSnackbar('代码已复制到剪贴板', 'success');
+            }).catch(err => {
+                // 降级方案
+                fallbackCopyText(fullTextToCopy);
+            });
+        } else {
+            // 使用降级方案
+            fallbackCopyText(fullTextToCopy);
+        }
+    } catch (error) {
+        console.error("复制代码时出错:", error);
+        showSnackbar('复制失败: ' + error.message, 'error');
+    }
+}
+
+/**
+ * 降级复制方案
+ */
+function fallbackCopyText(text) {
+    try {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        
+        // 避免滚动到页面底部
+        textArea.style.position = 'fixed';
+        textArea.style.top = '0';
+        textArea.style.left = '0';
+        textArea.style.width = '2em';
+        textArea.style.height = '2em';
+        textArea.style.padding = '0';
+        textArea.style.border = 'none';
+        textArea.style.outline = 'none';
+        textArea.style.boxShadow = 'none';
+        textArea.style.background = 'transparent';
+        
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        const successful = document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        if (successful) {
+            showSnackbar('内容已复制到剪贴板', 'success');
+        } else {
+            showSnackbar('复制失败，请手动选择文本复制', 'error');
+        }
+    } catch (err) {
+        showSnackbar('复制失败，请手动选择文本复制', 'error');
+    }
+}
+
+// 页面加载完成后初始化
+document.addEventListener('DOMContentLoaded', function() {
+    // 初始化弹窗
+    initCodePreviewDialog();
+    
+    // 添加双击事件监听器到代码预览区
+    const codeViewContainer = document.querySelector('.code-view-container');
+    if (codeViewContainer) {
+        // 移除可能存在的旧监听器
+        codeViewContainer.removeEventListener('dblclick', showCodePreviewDialog);
+        // 添加新监听器
+        codeViewContainer.addEventListener('dblclick', showCodePreviewDialog);
+        console.log("双击监听器已绑定到代码预览区");
+    }
+    
+    // 确保弹窗关闭按钮正常工作
+    const closeButtons = document.querySelectorAll('#code-preview-dialog .mdui-dialog-close, #code-preview-dialog .mdui-dialog-actions .mdui-dialog-close');
+    closeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            if (codePreviewDialog) {
+                codePreviewDialog.close();
+            }
+        });
+    });
+});
+
+</script>
+</body>
+</html>
